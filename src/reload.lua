@@ -127,11 +127,15 @@ function resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 	-- The icons stop overlapping the boon properly when scaled down, so shift them a bit right to look normal again
 	SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = scaleFactor, Duration = 0 })
 	SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = scaleFactor, Duration = 0 })
-	Move({ Id = components[purchaseButtonKey.."Icon"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+	if (config.LastLootChoices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
+		Move({ Id = components[purchaseButtonKey.."Icon"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+	end
 
 	SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = scaleFactor, Duration = 0 })
 	SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = scaleFactor, Duration = 0 })
-	Move({ Id = components[purchaseButtonKey.."Frame"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+	if (config.LastLootChoices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
+		Move({ Id = components[purchaseButtonKey.."Frame"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+	end
 
 	-- TODO: shift this down left ~5 pixels once vanilla UI is referenced
 	if (components[purchaseButtonKey.."ElementIcon"] ~= nil) then
@@ -142,15 +146,20 @@ function resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 	if (components[purchaseButtonKey.."ExchangeSymbol"] ~= nil) then
 		SetScaleX({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = scaleFactor, Duration = 0 })
 		SetScaleY({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = scaleFactor, Duration = 0 })
-		Move({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
 
 		SetScaleX({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Fraction = scaleFactor, Duration = 0 })
 		SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Fraction = scaleFactor, Duration = 0 })
-		Move({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+
 
 		SetScaleX({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = scaleFactor, Duration = 0 })
 		SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = scaleFactor, Duration = 0 })
-		Move({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })	
+
+
+		if (config.LastLootChoices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
+			Move({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+			Move({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+			Move({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })	
+		end
 	end
 
 	if (components[purchaseButtonKey.."QuestIcon"] ~= nil) then

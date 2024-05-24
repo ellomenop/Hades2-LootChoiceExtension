@@ -40,6 +40,19 @@ local function on_ready()
 	-- what to do when we are ready, but not re-do on reload.
 	if config.enabled == false then return end
 
+	rom.gui.add_to_menu_bar(function()
+		if rom.ImGui.BeginMenu("Configure") then
+			rom.ImGui.Text("Number of reward choices:")
+
+			local value, clicked = rom.ImGui.SliderInt("", config.Choices, 3, 6)
+			if clicked then
+				config.Choices = value
+			end
+
+			rom.ImGui.EndMenu()
+		end
+	end)
+
 	import 'sjson.lua'
 	import 'ready.lua'
 end

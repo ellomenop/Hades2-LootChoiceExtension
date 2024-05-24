@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added configuration slider in-game via imGUI
+
+### Fixed
+
+- Fixed Icons moving to top left of screen when configured to show 3 rewards
+
 ## [0.0.2] - 2024-05-24
 
 ### Fixed
