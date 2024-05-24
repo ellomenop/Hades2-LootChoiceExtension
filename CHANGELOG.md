@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.1] - 2024-05-24
+### Fixed
+
+- Fixed accidental rearrangement of sjson loading to before locals were defined
 
 ## [0.0.1] - 2024-05-24
 
