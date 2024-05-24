@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1] - 2024-05-24
 
+## [0.0.1] - 2024-05-24
+
 ### Added
 
 - Initial commit with all basic functionality
+
+[unreleased]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.1...HEAD
+[0.0.1]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/32bafa324aa289fb96ac3d50fee90ea911ef4a3d...0.0.1
