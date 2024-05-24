@@ -40,17 +40,18 @@ local function on_ready()
 	-- what to do when we are ready, but not re-do on reload.
 	if config.enabled == false then return end
 
-	local baseChoices = GetTotalLootChoices()
-	-- Other mods should override this value
-	config.Choices = baseChoices
-	
+	import 'sjson.lua'
 	import 'ready.lua'
 end
 
 local function on_reload()
 	-- what to do when we are ready, but also again on every reload.
 	-- only do things that are safe to run over and over.
-	
+
+
+	-- Other mods should override this value
+	config.Choices = math.min(6, math.max(3, config.Choices))
+
 	import 'reload.lua'
 end
 

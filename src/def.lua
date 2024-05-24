@@ -1,4 +1,4 @@
----@meta AuthorName-ModName
+---@meta ellomenop-LootChoiceExtender
 local public = {}
 
 -- document whatever you made publicly available to other plugins here
