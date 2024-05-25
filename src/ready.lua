@@ -8,13 +8,13 @@
 --	values and functions later defined in `reload.lua`.
 
 -- Dictates how many loot choices game should try to show
-modutil.mod.Path.Wrap("GetTotalLootChoices", function(base)
-	return GetTotalLootChoices_override(base)
+modutil.mod.Path.Override("GetTotalLootChoices", function()
+	return GetTotalLootChoices_override()
 end)
 
 -- Dictates how many loot choices game will actually show
-modutil.mod.Path.Wrap("CalcNumLootChoices", function(base, isGodLoot, treatAsGodLootByShops)
-	return CalcNumLootChoices_override(base, isGodLoot, treatAsGodLootByShops)
+modutil.mod.Path.Override("CalcNumLootChoices", function(isGodLoot, treatAsGodLootByShops)
+	return CalcNumLootChoices_override(isGodLoot, treatAsGodLootByShops)
 end)
 
 -- Builds an individual boon slot on the boon offering screen
@@ -28,8 +28,8 @@ modutil.mod.Path.Wrap("CreateBoonLootButtons", function(base, screen, lootData, 
 end)
 
 -- Runs when using the Rarify feature.  SGG bug here forced me to rearrange method calls / change input to the presentation that plays
-modutil.mod.Path.Wrap("TryUpgradeBoon", function(base, lootData, screen, button)
-	return TryUpgradeBoon_override(base, lootData, screen, button)
+modutil.mod.Path.Override("TryUpgradeBoon", function(lootData, screen, button)
+	return TryUpgradeBoon_override(lootData, screen, button)
 end)
 
 -- Update the number of loot choices to use on each room load.  Holdover from old LootChoiceExt and maybe unnecessary these days

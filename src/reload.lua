@@ -5,11 +5,11 @@
 -- this file will be reloaded if it changes during gameplay,
 -- so only assign to values or define things here.
 
-function GetTotalLootChoices_override(base)
+function GetTotalLootChoices_override()
 	return config.LastLootChoices
 end
 
-function CalcNumLootChoices_override(base, isGodLoot, treatAsGodLootByShops)
+function CalcNumLootChoices_override(isGodLoot, treatAsGodLootByShops)
 	local numChoices = config.LastLootChoices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
 	if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
 			numChoices = numChoices - 1
@@ -178,7 +178,7 @@ function CreateBoonLootButtons_wrap( base, screen, lootData, reroll )
 	return returnVal
 end
 
-function TryUpgradeBoon_override( base, lootData, screen, button )
+function TryUpgradeBoon_override(lootData, screen, button )
 
 	local components = screen.Components
 
