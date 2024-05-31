@@ -82,6 +82,4 @@ sjson.hook(guiPath, function(data)
     table.insert(data.Obstacles, fourOptions)
     table.insert(data.Obstacles, fiveOptions)
     table.insert(data.Obstacles, sixOptions)
-
-    print(sjson.encode(data))
 end)
