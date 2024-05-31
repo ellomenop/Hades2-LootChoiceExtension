@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "ellomenop"
 name = "LootChoiceExtension"
-versionNumber = "0.0.3"
+versionNumber = "0.0.4"
 description = "Allows for more choices when picking up boons and other loot."
 websiteUrl = "https://github.com/ellomenop/Hades2-LootChoiceExtension"
 containsNsfwContent = false
