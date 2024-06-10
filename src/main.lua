@@ -53,8 +53,8 @@ local function on_ready()
 	-- what to do when we are ready, but not re-do on reload.
 	if config.enabled == false then return end
 
-	rom.gui.add_to_menu_bar(function()
-		if rom.ImGui.BeginMenu("Configure") then
+	rom.gui.add_imgui(function()
+		if rom.ImGui.Begin("Configure") then
 			rom.ImGui.Text("Number of reward choices:")
 
 			local value, clicked = rom.ImGui.SliderInt("", config.choices, CHOICE_LIMIT.MIN, CHOICE_LIMIT.MAX)
@@ -62,7 +62,18 @@ local function on_ready()
 				config.choices = value
 			end
 
-			rom.ImGui.EndMenu()
+			rom.ImGui.Text("Reward types enabled:")
+
+			local value, clicked = rom.ImGui.Checkbox("Hammers", config.WeaponUpgrade_enabled)
+			if clicked then config.WeaponUpgrade_enabled = value end
+			local value, clicked = rom.ImGui.Checkbox("Poms", config.StackUpgrade_enabled)
+			if clicked then config.StackUpgrade_enabled = value end
+			local value, clicked = rom.ImGui.Checkbox("Chaos", config.TrialUpgrade_enabled)
+			if clicked then config.TrialUpgrade_enabled = value end
+			local value, clicked = rom.ImGui.Checkbox("Boons", config.GodUpgrade_enabled)
+			if clicked then config.GodUpgrade_enabled = value end
+
+			rom.ImGui.End()
 		end
 	end)
 

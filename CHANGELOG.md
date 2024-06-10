@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Can enable / disable hammers, poms, chaos and god boons individually in the configuration
+
+### Fixed
+
+- Crash when rerolling exchange boons
+
 ## [0.0.5] - 2024-06-10
 
 ### Added

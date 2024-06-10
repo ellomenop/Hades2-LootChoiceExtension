@@ -1,50 +1,5 @@
 ---@meta _
--- globals we define are private to our plugin!
 ---@diagnostic disable: lowercase-global
-
--- this file will be reloaded if it changes during gameplay,
--- so only assign to values or define things here.
-
--- TODO: Change these to selectively give the configured choices or vanilla depending on excludedSubjects
-function GetTotalLootChoices_override()
-	return config.choices
-end
-
-function CalcNumLootChoices_override(isGodLoot, treatAsGodLootByShops)
-	local numChoices = config.choices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
-	if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
-			numChoices = numChoices - 1
-	end
-	return numChoices
-end
-
--- TODO: split into npcs / hammer / pom / chaos and allow enablement individually
-local excludedSubjects = {
-    "NPC_Arachne_01",
-    "NPC_Narcissus_01",
-    "NPC_Echo_01",
-    "NPC_LordHades_01",
-    "NPC_Medea_01",
-    "NPC_Icarus_01",
-    "NPC_Circe_01",
-	"NPC_Artemis_Field_01",
-	--[[
-		"WeaponUpgrade", -- Hammer
-		"StackUpgrade", -- Pom
-		"TrialUpgrade", -- Chaos
-		"ApolloUpgrade",
-		"ZeusUpgrade",
-		"HeraUpgrade",
-		"PoseidonUpgrade",
-		"ApolloUpgrade",
-		"DemeterUpgrade",
-		"HestiaUpgrade",
-		"AphroditeUpgrade",
-		"HephaestusUpgrade",
-		"HermesUpgrade",
-		"ArtemisUpgrade",
-	]]
-}
 
 local boonSlotObtacleNames = {
 	[3] = "BoonSlotBase",
@@ -55,15 +10,39 @@ local boonSlotObtacleNames = {
 
 local indicesToRemove = {}
 
-function isBoonSubjectExcluded(subjectName)
-	if subjectName == nil then return true end
+local is_god_boon = {
+	ZeusUpgrade_enabled = true,
+	HeraUpgrade_enabled = true,
+	PoseidonUpgrade_enabled = true,
+	ApolloUpgrade_enabled = true,
+	DemeterUpgrade_enabled = true,
+	HestiaUpgrade_enabled = true,
+	AphroditeUpgrade_enabled = true,
+	HephaestusUpgrade_enabled = true,
+	HermesUpgrade_enabled = true,
+	ArtemisUpgrade_enabled = true,
+}
 
-    for _, name in ipairs(excludedSubjects) do
-        if subjectName == name then
-            return true
-        end
-    end
-    return false
+function isBoonSubjectExcluded(subjectName)
+	if subjectName == nil or subjectName:sub(1,3) == "NPC" then return true end
+	if is_god_boon[subjectName] then
+		return not config.GodUpgrade_enabled
+	else
+    	return not config[subjectName .. "_enabled"]
+	end
+end
+
+-- TODO: Change these to selectively give the configured choices or vanilla depending on excludedSubjects?
+function GetTotalLootChoices_override()
+	return config.choices
+end
+
+function CalcNumLootChoices_override(isGodLoot, treatAsGodLootByShops)
+	local numChoices = config.choices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
+	if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
+			numChoices = numChoices - 1
+	end
+	return numChoices
 end
 
 -- Main meat of the mod
@@ -154,7 +133,9 @@ function resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 		SetScaleY({ Id = components[purchaseButtonKey.."ElementIcon"].Id, Fraction = scaleFactor, Duration = 0 })
 	end
 
-	if (components[purchaseButtonKey.."ExchangeSymbol"] ~= nil) then
+	if (components[purchaseButtonKey.."ExchangeSymbol"] ~= nil
+			and components[purchaseButtonKey.."ExchangeIcon"] ~= nil
+			and components[purchaseButtonKey.."ExchangeIconFrame"] ~= nil) then
 		SetScaleX({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = scaleFactor, Duration = 0 })
 		SetScaleY({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Fraction = scaleFactor, Duration = 0 })
 
@@ -169,7 +150,7 @@ function resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 		if (config.choices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
 			Move({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
 			Move({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
-			Move({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })	
+			Move({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
 		end
 	end
 
@@ -201,17 +182,18 @@ function DestroyBoonLootButtons_wrap( base, screen, lootData )
     local toDestroy = {}
     for index = 3, CHOICE_LIMIT.MAX do -- do all the way to 6 blindly in case config has changed since menu was opened
         local destroyIndexes = {
-        "PurchaseButton"..index,
-        "PurchaseButton"..index.. "Lock",
-        "PurchaseButton"..index.. "Highlight",
-        "PurchaseButton"..index.. "Icon",
-        "PurchaseButton"..index.. "ExchangeIcon",
-        "PurchaseButton"..index.. "ExchangeIconFrame",
-        "PurchaseButton"..index.. "QuestIcon",
-        "PurchaseButton"..index.. "ElementIcon",
-        "Backing"..index,
-        "PurchaseButton"..index.. "Frame",
-        "PurchaseButton"..index.. "Patch",
+			"PurchaseButton"..index,
+			"PurchaseButton"..index.. "Lock",
+			"PurchaseButton"..index.. "Highlight",
+			"PurchaseButton"..index.. "Icon",
+			-- "PurchaseButton"..index.. "ExchangeSymbol", -- Is the exclusion of this an SGG bug or because its not an anim?
+			"PurchaseButton"..index.. "ExchangeIcon",
+			"PurchaseButton"..index.. "ExchangeIconFrame",
+			"PurchaseButton"..index.. "QuestIcon",
+			"PurchaseButton"..index.. "ElementIcon",
+			"Backing"..index,
+			"PurchaseButton"..index.. "Frame",
+			"PurchaseButton"..index.. "Patch",
         }
         for i, indexName in pairs( destroyIndexes ) do
             if components[indexName] then
