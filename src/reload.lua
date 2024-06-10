@@ -28,7 +28,7 @@ function isBoonSubjectExcluded(subjectName)
 	if is_god_boon[subjectName] then
 		return not config.GodUpgrade_enabled
 	else
-    	return not config[subjectName .. "_enabled"]
+    	return not is_god_boon[subjectName .. "_enabled"]
 	end
 end
 
