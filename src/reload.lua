@@ -5,12 +5,13 @@
 -- this file will be reloaded if it changes during gameplay,
 -- so only assign to values or define things here.
 
+-- TODO: Change these to selectively give the configured choices or vanilla depending on excludedSubjects
 function GetTotalLootChoices_override()
-	return config.LastLootChoices
+	return config.choices
 end
 
 function CalcNumLootChoices_override(isGodLoot, treatAsGodLootByShops)
-	local numChoices = config.LastLootChoices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
+	local numChoices = config.choices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
 	if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
 			numChoices = numChoices - 1
 	end
@@ -30,7 +31,18 @@ local excludedSubjects = {
 	--[[
 		"WeaponUpgrade", -- Hammer
 		"StackUpgrade", -- Pom
-		"TrialUpgrade" -- Chaos
+		"TrialUpgrade", -- Chaos
+		"ApolloUpgrade",
+		"ZeusUpgrade",
+		"HeraUpgrade",
+		"PoseidonUpgrade",
+		"ApolloUpgrade",
+		"DemeterUpgrade",
+		"HestiaUpgrade",
+		"AphroditeUpgrade",
+		"HephaestusUpgrade",
+		"HermesUpgrade",
+		"ArtemisUpgrade",
 	]]
 }
 
@@ -44,6 +56,8 @@ local boonSlotObtacleNames = {
 local indicesToRemove = {}
 
 function isBoonSubjectExcluded(subjectName)
+	if subjectName == nil then return true end
+
     for _, name in ipairs(excludedSubjects) do
         if subjectName == name then
             return true
@@ -66,22 +80,19 @@ function CreateUpgradeChoiceButton_wrap(base, screen, lootData, itemIndex, itemD
 		return base(screen, lootData, itemIndex, itemData)
 	end
 
-	screen.MaxChoices = config.LastLootChoices
-	local scaleFactor = 3.0 / config.LastLootChoices
-	screen.PurchaseButton.Name = boonSlotObtacleNames[config.LastLootChoices] -- TODO: Change this for 5 and 6 boon hitboxes?
+	screen.MaxChoices = config.choices
+	local scaleFactor = 3.0 / config.choices
+	screen.PurchaseButton.Name = boonSlotObtacleNames[config.choices]
 
 	-- Set up static data that determines how the layout is built
-	print("Modifying screen data")
 	resizeBoonScreenData(screen, scaleFactor)
 	
-	--print("Screen data: " .. sjson.encode(screen))
-	local returnVal = base(screen, lootData, itemIndex, itemData)
+	local button = base(screen, lootData, itemIndex, itemData)
 
 	-- Resize and move components after they've been drawn to screen
-	print("Resizing and tweaking components on boon screen")
 	resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 
-	return returnVal
+	return button
 end
 
 function resizeBoonScreenData(screen, scaleFactor)
@@ -102,8 +113,8 @@ function resizeBoonScreenData(screen, scaleFactor)
 
 	screen.IconOffsetY = rom.game.ScreenData.UpgradeChoice.IconOffsetY * scaleFactor
 	screen.ExchangeIconOffsetY = rom.game.ScreenData.UpgradeChoice.ExchangeIconOffsetY * scaleFactor
-	screen.ExchangeIconOffsetX = rom.game.ScreenData.UpgradeChoice.ExchangeIconOffsetX + 5  * (config.LastLootChoices - 3)
-	screen.ExchangeSymbol.OffsetX = rom.game.ScreenData.UpgradeChoice.ExchangeSymbol.OffsetX + 5  * (config.LastLootChoices - 3)
+	screen.ExchangeIconOffsetX = rom.game.ScreenData.UpgradeChoice.ExchangeIconOffsetX + 5  * (config.choices - 3)
+	screen.ExchangeSymbol.OffsetX = rom.game.ScreenData.UpgradeChoice.ExchangeSymbol.OffsetX + 5  * (config.choices - 3)
 	screen.BonusIconOffsetY = rom.game.ScreenData.UpgradeChoice.BonusIconOffsetY * scaleFactor
 	screen.QuestIconOffsetY = rom.game.ScreenData.UpgradeChoice.QuestIconOffsetY * scaleFactor
 	screen.PoseidonDuoIconOffsetY = rom.game.ScreenData.UpgradeChoice.PoseidonDuoIconOffsetY * scaleFactor
@@ -127,14 +138,14 @@ function resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 	-- The icons stop overlapping the boon properly when scaled down, so shift them a bit right to look normal again
 	SetScaleX({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = scaleFactor, Duration = 0 })
 	SetScaleY({ Id = components[purchaseButtonKey.."Icon"].Id, Fraction = scaleFactor, Duration = 0 })
-	if (config.LastLootChoices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
-		Move({ Id = components[purchaseButtonKey.."Icon"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+	if (config.choices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
+		Move({ Id = components[purchaseButtonKey.."Icon"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
 	end
 
 	SetScaleX({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = scaleFactor, Duration = 0 })
 	SetScaleY({ Id = components[purchaseButtonKey.."Frame"].Id, Fraction = scaleFactor, Duration = 0 })
-	if (config.LastLootChoices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
-		Move({ Id = components[purchaseButtonKey.."Frame"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
+	if (config.choices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
+		Move({ Id = components[purchaseButtonKey.."Frame"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
 	end
 
 	-- TODO: shift this down left ~5 pixels once vanilla UI is referenced
@@ -155,10 +166,10 @@ function resizeBoonScreenComponents(screen, itemIndex, scaleFactor)
 		SetScaleY({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Fraction = scaleFactor, Duration = 0 })
 
 
-		if (config.LastLootChoices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
-			Move({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
-			Move({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })
-			Move({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Angle = 360, Distance = 5  * (config.LastLootChoices - 3) })	
+		if (config.choices ~= 3) then -- Move of Distance = 0 puts component to top left corner of screen
+			Move({ Id = components[purchaseButtonKey.."ExchangeSymbol"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
+			Move({ Id = components[purchaseButtonKey.."ExchangeIcon"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })
+			Move({ Id = components[purchaseButtonKey.."ExchangeIconFrame"].Id, Angle = 360, Distance = 5  * (config.choices - 3) })	
 		end
 	end
 
@@ -171,60 +182,70 @@ end
 function CreateBoonLootButtons_wrap( base, screen, lootData, reroll )
 	local returnVal = base(screen, lootData, reroll)
 	-- Delete off the end of the list past 3 rewards as needed if this is an excluded subject
-	for _, index in ipairs(indicesToRemove) do
-		table.remove(screen.UpgradeButtons)
+	-- Grab reward from active screens because lootData here is different and doesn't have subject name
+	if isBoonSubjectExcluded(rom.mods['SGG_Modding-ModUtil'].mod.Path.Get("ActiveScreens.UpgradeChoice.SubjectName")) then
+		for _, index in ipairs(indicesToRemove) do
+			print("Deleting extra table values from upgradeOptions")
+			table.remove(screen.UpgradeButtons)
+		end
 	end
 	indicesToRemove = {}
 	return returnVal
 end
 
-function TryUpgradeBoon_override(lootData, screen, button )
+function DestroyBoonLootButtons_wrap( base, screen, lootData )
+	base(screen, lootData)
 
-	local components = screen.Components
+	-- For each extra boon we displayed, also delete those
+    local components = screen.Components
+    local toDestroy = {}
+    for index = 3, CHOICE_LIMIT.MAX do -- do all the way to 6 blindly in case config has changed since menu was opened
+        local destroyIndexes = {
+        "PurchaseButton"..index,
+        "PurchaseButton"..index.. "Lock",
+        "PurchaseButton"..index.. "Highlight",
+        "PurchaseButton"..index.. "Icon",
+        "PurchaseButton"..index.. "ExchangeIcon",
+        "PurchaseButton"..index.. "ExchangeIconFrame",
+        "PurchaseButton"..index.. "QuestIcon",
+        "PurchaseButton"..index.. "ElementIcon",
+        "Backing"..index,
+        "PurchaseButton"..index.. "Frame",
+        "PurchaseButton"..index.. "Patch",
+        }
+        for i, indexName in pairs( destroyIndexes ) do
+            if components[indexName] then
+                table.insert(toDestroy, components[indexName].Id)
+                components[indexName] = nil
+            end
+        end
+    end
+    Destroy({ Ids = toDestroy })
+end
 
-	local traitData = button.Data
-	local validUpgradeIndex = false
-	for i, upgradeData in pairs(lootData.UpgradeOptions) do
-		if traitData.Name == upgradeData.ItemName and GetUpgradedRarity(traitData.Rarity) ~= nil and traitData.RarityLevels[GetUpgradedRarity(traitData.Rarity)] ~= nil then
-			upgradeData.Rarity = GetUpgradedRarity(traitData.Rarity)
-			validUpgradeIndex = i
-		end
+function HandleLootPickup_wrap(base, currentRun, loot, args )
+	if (loot_choices_at_room_load ~= config.choices) then
+		print("Loot choice at room load: " .. tostring(loot_choices_at_room_load) .. ", loot choices configured: " .. config.choices .. " - Rerolling rewards")
+		SetTraitsOnLoot(loot, args)
 	end
-	if validUpgradeIndex then
-		
-		local toDestroy = {}
-		local destroyIndexes = {
-		"PurchaseButton"..validUpgradeIndex,
-		"PurchaseButton"..validUpgradeIndex.. "Lock",
-		"PurchaseButton"..validUpgradeIndex.. "Highlight",
-		"PurchaseButton"..validUpgradeIndex.. "Icon",
-		"PurchaseButton"..validUpgradeIndex.. "ExchangeIcon",
-		"PurchaseButton"..validUpgradeIndex.. "ExchangeIconFrame",
-		"PurchaseButton"..validUpgradeIndex.. "QuestIcon",
-		"PurchaseButton"..validUpgradeIndex.. "ElementIcon",
-		"Backing"..validUpgradeIndex,
-		"PurchaseButton"..validUpgradeIndex.. "Frame",
-		"PurchaseButton"..validUpgradeIndex.. "Patch",
-		}
-		for i, indexName in pairs( destroyIndexes ) do
-			if components[indexName] then
-				table.insert(toDestroy, components[indexName].Id)
-				components[indexName] = nil
-			end
-		end
-		Destroy({ Ids = toDestroy })
+	base(currentRun, loot, args)
+end
 
-		-- Base game uses button in the UpgradeBoonRarityPresentation instead of newButton.
-		-- button gets destroyed from the above line at the same time (as its "PurchaseButton"..validUpgradeIndex). This seems to somehow lose scale / dimension data
-		-- and results in the presentation staying full size / normal aspect ratio instead of matching the button dimensions
-		local newButton = CreateUpgradeChoiceButton( screen, lootData, validUpgradeIndex, lootData.UpgradeOptions[validUpgradeIndex])
-		UpgradeBoonRarityPresentation( newButton ) -- Only modified / moved line
+function HandleUpgradeChoiceSelection_wrap(base, screen, button, args )
+	screen.UpgradeButtons = game.CollapseTableOrderedByKeys(screen.UpgradeButtons)
 
-		local notifyName = "ScreenInput"
-		if screen.Name ~= nil then
-			notifyName = notifyName..screen.Name
-		end
-		NotifyOnInteract({ Ids = { newButton.Id }, Notify = notifyName })
-		return newButton
+	if config.vow_of_forsaking == VowOptions.RANDOM then
+		-- UpgradeButtons are only used for concave stone + vow of forsaking at this point, so shuffle them so vow choses random X instead of first X
+		FYShuffle(screen.UpgradeButtons)
+		base(screen, button, args)
+	elseif config.vow_of_forsaking == VowOptions.ALL then
+		local pre = game.DeepCopyTable(game.MetaUpgradeData.BanUnpickedBoonsShrineUpgrade.ChangeValue)
+		game.MetaUpgradeData.BanUnpickedBoonsShrineUpgrade.ChangeValue = config.choices - 1
+
+		base(screen, button, args)
+
+		game.MetaUpgradeData.BanUnpickedBoonsShrineUpgrade.ChangeValue = pre
+	else
+		base(screen, button, args)
 	end
 end

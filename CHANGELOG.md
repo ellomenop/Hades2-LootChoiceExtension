@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Replaced most overrides with wraps
+- Added support for same-room config changes
+- Added support for vow of forsaking to choose random boons
+
+### Fixed
+
+- Added cleanup for additional choices when screen is rerolled
+
 ## [0.0.4] - 2024-05-31
 
 ### Fixed

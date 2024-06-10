@@ -35,6 +35,19 @@ reload = mods['SGG_Modding-ReLoad']
 config = chalk.auto 'config.lua'
 -- ^ this updates our `.cfg` file in the config folder!
 public.config = config -- so other mods can access our config
+loot_choices_at_room_load = config.choices
+
+-- Mod is only set up to look good and function properly within these values
+CHOICE_LIMIT = {
+	MIN = 3,
+	MAX = 6,
+}
+
+---@enum VowOptions
+VowOptions = {
+	RANDOM = "Random",
+	ALL = "All"
+}
 
 local function on_ready()
 	-- what to do when we are ready, but not re-do on reload.
@@ -44,9 +57,9 @@ local function on_ready()
 		if rom.ImGui.BeginMenu("Configure") then
 			rom.ImGui.Text("Number of reward choices:")
 
-			local value, clicked = rom.ImGui.SliderInt("", config.Choices, 3, 6)
+			local value, clicked = rom.ImGui.SliderInt("", config.choices, CHOICE_LIMIT.MIN, CHOICE_LIMIT.MAX)
 			if clicked then
-				config.Choices = value
+				config.choices = value
 			end
 
 			rom.ImGui.EndMenu()
@@ -63,7 +76,7 @@ local function on_reload()
 
 
 	-- Other mods should override this value
-	config.Choices = math.min(6, math.max(3, config.Choices))
+	config.choices = math.min(CHOICE_LIMIT.MAX, math.max(CHOICE_LIMIT.MIN, config.choices))
 
 	import 'reload.lua'
 end
@@ -72,6 +85,6 @@ end
 local loader = reload.auto_single()
 
 -- this runs only when modutil and the game's lua is ready
-modutil.on_ready_final(function()
+modutil.once_loaded.game(function()
 	loader.load(on_ready, on_reload)
 end)
