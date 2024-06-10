@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.7] - 2024-06-10
+
 ## [0.0.6] - 2024-06-10
 
 ### Fixed
@@ -62,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial commit with all basic functionality
 
-[unreleased]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.6...HEAD
+[unreleased]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.7...HEAD
+[0.0.7]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.6...0.0.7
 [0.0.6]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.3...0.0.4
