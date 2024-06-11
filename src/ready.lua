@@ -49,10 +49,8 @@ end)
 -- This is to fix an SGG bug where the rarify animation is attached to the previous version of the button (thats destroyed) instead of the rarified one - this breaks the scaling
 function TryUpgradeBoon_context_UpgradeBoonRarityPresentation_wrap(base, button)
 	if button.PlayRarityPresentation then
-		print("Playing PlayRarityPresentation")
 		base(button)
 	end
-	print("Suppressed PlayRarityPresentation")
 end
 
 -- Set flag and manually call UpgradeBoonRarityPresentation with new rarified button instead of old, destroyed button

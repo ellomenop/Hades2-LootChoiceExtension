@@ -11,16 +11,16 @@ local boonSlotObtacleNames = {
 local indicesToRemove = {}
 
 local is_god_boon = {
-	ZeusUpgrade_enabled = true,
-	HeraUpgrade_enabled = true,
-	PoseidonUpgrade_enabled = true,
-	ApolloUpgrade_enabled = true,
-	DemeterUpgrade_enabled = true,
-	HestiaUpgrade_enabled = true,
-	AphroditeUpgrade_enabled = true,
-	HephaestusUpgrade_enabled = true,
-	HermesUpgrade_enabled = true,
-	ArtemisUpgrade_enabled = true,
+	ZeusUpgrade = true,
+	HeraUpgrade = true,
+	PoseidonUpgrade = true,
+	ApolloUpgrade = true,
+	DemeterUpgrade = true,
+	HestiaUpgrade = true,
+	AphroditeUpgrade = true,
+	HephaestusUpgrade = true,
+	HermesUpgrade = true,
+	ArtemisUpgrade = true,
 }
 
 function isBoonSubjectExcluded(subjectName)
@@ -28,7 +28,7 @@ function isBoonSubjectExcluded(subjectName)
 	if is_god_boon[subjectName] then
 		return not config.GodUpgrade_enabled
 	else
-    	return not is_god_boon[subjectName .. "_enabled"]
+    	return not config[subjectName .. "_enabled"]
 	end
 end
 
