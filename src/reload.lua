@@ -21,6 +21,7 @@ local is_god_boon = {
 	HephaestusUpgrade = true,
 	HermesUpgrade = true,
 	ArtemisUpgrade = true,
+	AresUpgrade = true,
 }
 
 function isBoonSubjectExcluded(subjectName)
