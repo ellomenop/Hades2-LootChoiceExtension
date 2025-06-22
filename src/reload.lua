@@ -39,7 +39,7 @@ function GetTotalLootChoices_override()
 end
 
 function CalcNumLootChoices_override(isGodLoot, treatAsGodLootByShops)
-	local numChoices = config.choices - GetNumMetaUpgrades("ReducedLootChoicesShrineUpgrade")
+	local numChoices = config.choices -- GetNumMetaUpgrades function doesn't exist anymore
 	if (isGodLoot or treatAsGodLootByShops) and HasHeroTraitValue("RestrictBoonChoices") then
 			numChoices = numChoices - 1
 	end
@@ -215,7 +215,7 @@ function HandleLootPickup_wrap(base, currentRun, loot, args )
 end
 
 function HandleUpgradeChoiceSelection_wrap(base, screen, button, args )
-	screen.UpgradeButtons = game.CollapseTableOrderedByKeys(screen.UpgradeButtons)
+	screen.UpgradeButtons = game.CollapseTable(screen.UpgradeButtons) -- CollapseTableOrderedByKeys seems to have been replaced with CollapseTable, but it doesn't use OrderedPairs
 
 	if config.vow_of_forsaking == VowOptions.RANDOM then
 		-- UpgradeButtons are only used for concave stone + vow of forsaking at this point, so shuffle them so vow choses random X instead of first X
