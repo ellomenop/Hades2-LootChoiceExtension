@@ -67,7 +67,10 @@ local function on_ready()
 			local value, clicked = rom.ImGui.Checkbox("Hammers", config.WeaponUpgrade_enabled)
 			if clicked then config.WeaponUpgrade_enabled = value end
 			local value, clicked = rom.ImGui.Checkbox("Poms", config.StackUpgrade_enabled)
-			if clicked then config.StackUpgrade_enabled = value end
+			if clicked then 
+				config.StackUpgrade_enabled = value
+				config.StackUpgradeTriple_enabled = value
+			end
 			local value, clicked = rom.ImGui.Checkbox("Chaos", config.TrialUpgrade_enabled)
 			if clicked then config.TrialUpgrade_enabled = value end
 			local value, clicked = rom.ImGui.Checkbox("Boons", config.GodUpgrade_enabled)

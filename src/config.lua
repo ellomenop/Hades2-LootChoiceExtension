@@ -8,6 +8,7 @@ return {
 	-- Enablement
 	WeaponUpgrade_enabled = true, -- Hammer
 	StackUpgrade_enabled = true, -- Pom
+	StackUpgradeTriple_enabled = true, -- Triple Pom
 	TrialUpgrade_enabled = true, -- Chaos
 	
 	-- All god rewards are rolled into this one config

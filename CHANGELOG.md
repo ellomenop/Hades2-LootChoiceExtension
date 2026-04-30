@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for triple poms
+
 ## [0.0.10] - 2025-06-22
 
 ## [0.0.9] - 2025-03-29
