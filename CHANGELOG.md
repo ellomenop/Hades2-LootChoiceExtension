@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-30
+
 ### Added
 
 - Support for triple poms
@@ -82,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial commit with all basic functionality
 
-[unreleased]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.10...HEAD
+[unreleased]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.10...1.0.0
 [0.0.10]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.9...0.0.10
 [0.0.9]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.8...0.0.9
 [0.0.8]: https://github.com/ellomenop/Hades2-LootChoiceExtension/compare/0.0.7...0.0.8
